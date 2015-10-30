@@ -15,10 +15,6 @@ var PRODUCTS = [
     {"id":"10", "keyword":"mobile accessory", "file":"img/10.jpg", "name":"Tenth Item"}
 ];
 
-// No-brainer auth: server will authenticate with
-// username "dev" and password "moravia", respond
-// with a token, and forget the token when restarted.
-
 var currentToken;
 app.post('/auth.json', function(req, res) {
 
@@ -27,7 +23,6 @@ app.post('/auth.json', function(req, res) {
       password = body.password;
 
   if (username == 'moravia' && password == 'argentina') {
-    // Generate and save the token (forgotten upon server restart).
     currentToken = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     res.send({
       success: true,
@@ -42,15 +37,12 @@ app.post('/auth.json', function(req, res) {
 });
 
 function validTokenProvided(req, res) {
-
-  // Check POST, GET, and headers for supplied token.
   var userToken = req.body.token || req.param('token') || req.headers.token;
 
   if (!currentToken || userToken != currentToken) {
     res.send(401, { error: 'Invalid token. You provided: ' + userToken });
     return false;
   }
-
   return true;
 }
 
